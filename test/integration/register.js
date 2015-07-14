@@ -16,7 +16,6 @@ describe('Users', () => {
         });
     });
 
-
     it('Should accept POST request with proper payload', () => {
         return server.injectThen({
             method: 'POST',

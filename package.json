@@ -16,6 +16,7 @@
     "hapi": "^8.8.0",
     "hapi-auth-hawk": "^3.0.0",
     "hapi-couchdb": "^0.2.0",
+    "hapi-relax": "^1.0.1",
     "nano": "^6.1.4",
     "redis": "^0.12.1",
     "uuid": "^2.0.1"

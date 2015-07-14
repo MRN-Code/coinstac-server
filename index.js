@@ -2,7 +2,20 @@
 
 const Hapi = require('hapi');
 const server = new Hapi.Server();
-var config = require('config');
+const config = require('config');
+const plugins = [
+    {
+        register: require('hapi-relax'),
+        options: {
+            nano: {
+                url: config.get('couchdb.users.url'),
+                db: config.get('couchdb.users.db')
+            },
+            prefix: 'userDb'
+        }
+    },
+    { register: require('inject-then') }
+];
 
 server.connection({port:config.get('server.port')});
 
@@ -10,6 +23,12 @@ server.route({
     method: 'GET',
     path: '/users',
     handler: (request, reply) => {
+        server.methods.userDb.get('*', (err, all) => {
+            console.log(err);
+            console.log(all);
+            reply(JSON.stringify(all));
+        });
+        /*
         const users = [
             {
                 id: 1,
@@ -21,24 +40,15 @@ server.route({
             }
         ];
         reply(JSON.stringify(users));
+        */
     }
 });
 
-server.register(
-    [
-        {
-            register: require('hapi-couchdb').register,
-            options: {
-                url: 'http://username:password@localhost:5984',
-                db: 'mycouchdb'
-            }
-        },
-        { register: require('inject-then') }
-    ], function(err) {
+server.register(plugins, function(err) {
         if (err) {
-            console.log('Error registering hapi-couchdb', err);
+            console.log('Error registering plugins', err);
         } else {
-            console.log('hapi-couchdb registered');
+            console.log('plugins registered');
             if (!module.parent) {
                 server.start(() => {
                     console.log('Server running at:', server.info.uri);
