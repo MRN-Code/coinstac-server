@@ -16,7 +16,17 @@ function setPlugins() {
     const plugins = [
         {
             register: require('./lib/plugins/hapi-pouch.js'),
-            options: _.merge(config.get('pouchdb.users'), { namespace: 'userDb'})
+            options: _.merge(
+                config.get('pouchdb.users'),
+                { namespace: 'userDb' }
+            )
+        },
+        {
+            register: require('./lib/plugins/hapi-pouch.js'),
+            options: _.merge(
+                config.get('pouchdb.consortia'),
+                { namespace: 'consortiaDb' }
+            )
         },
         { register: require('inject-then') }
     ];
@@ -38,7 +48,6 @@ server.register(setPlugins(), function(err) {
         console.log('Error registering plugins', err);
     } else {
         console.log('plugins registered');
-        console.log(server.plugins);
         if (!module.parent) {
             server.start(() => {
                 console.log('Server running at:', server.info.uri);

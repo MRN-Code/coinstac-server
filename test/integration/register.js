@@ -69,7 +69,7 @@ function prepareUserDb(done) {
 }
 
 describe('Users', () => {
-    beforeEach(prepareUserDb);
+    before(prepareUserDb);
     it('Should accept GET request', () => {
         return server.injectThen({
             method: 'GET',
@@ -94,9 +94,8 @@ describe('Users', () => {
             method: 'GET',
             url: path + '/' + fakeUsers[0]._id
         }).then ((resp) => {
-            console.log(resp.result);
-            const users = JSON.parse(resp.result);
-            users.length.should.eql(fakeUsers.length);
+            const user = JSON.parse(resp.result);
+            user.username.should.eql(fakeUsers[0].username);
         });
     });
 
@@ -116,7 +115,6 @@ describe('Users', () => {
                 payload: newUser
             }).then((resp) => {
                 userId = resp.result;
-                console.log('User ID: ' + resp.result);
                 resp.statusCode.should.eql(200);
             });
         });
@@ -126,7 +124,6 @@ describe('Users', () => {
                 method: 'GET',
                 url: path + '/' + userId
             }).then ((resp) => {
-                console.log('Result: ' + resp.result);
                 const user = JSON.parse(resp.result);
                 user.username.should.eql(newUser.username);
             });

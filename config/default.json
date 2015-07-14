@@ -8,6 +8,12 @@
             "hostname": "localhost",
             "port": 5984,
             "db": "coinstac-users"
+        },
+        "consortia": {
+            "protocol": "http",
+            "hostname": "localhost",
+            "port": 5984,
+            "db": "coinstac-consortia"
         }
     }
 }
