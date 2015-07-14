@@ -8,7 +8,7 @@
             "host": "localhost",
             "port": 5984,
             "db": "coinstac-users",
-            "prefix": "userDb"
+            "namespace": "userDb"
         }
     }
 }
