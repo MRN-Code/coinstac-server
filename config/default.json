@@ -1,4 +1,5 @@
 {
-    "required": "I am required",
-    "optional": "I am optional"
+    "server": {
+        "port": 3000
+    }
 }
