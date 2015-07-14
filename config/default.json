@@ -5,7 +5,7 @@
     "pouchdb":{
         "users": {
             "protocol": "http",
-            "host": "localhost",
+            "hostname": "localhost",
             "port": 5984,
             "db": "coinstac-users",
             "namespace": "userDb"

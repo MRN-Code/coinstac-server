@@ -1,15 +1,20 @@
 'use strict';
 
+const url = require('url');
 const chai = require('chai');
 const config = require('config'); // jshint ignore:line
-const Pouch = require('pouchdb');
 const randomstring = require('randomstring');
-const testDb = 'test-register';
-// config.pouchdb.users.db = testDb; // ENABLE!
-const path = '/' + testDb;
+const testDb = 'test_register';
+config.pouchdb.users.db = testDb;
+const path = url.format({
+    protocol: config.pouchdb.users.protocol,
+    hostname: config.pouchdb.users.hostname,
+    port: config.pouchdb.users.port,
+    pathname: config.pouchdb.users.db
+});
+const PouchDB = require('PouchDB');
 const server = require('../../index.js');
-// let db = server.plugin.pouch.users;
-let db = new Pouch('http://localhost:5984' + testDb);
+let db = server.plugins.pouch.users;
 chai.use(require('chai-as-promised'));
 chai.should();
 
