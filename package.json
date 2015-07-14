@@ -7,7 +7,17 @@
     "test": "test"
   },
   "dependencies": {
-    "config": "^1.11.0"
+    "bluebird": "^2.9.33",
+    "co": "^4.6.0",
+    "config": "^1.11.0",
+    "good": "^6.3.0",
+    "good-console": "^5.0.2",
+    "good-file": "^5.0.1",
+    "hapi": "^8.8.0",
+    "hapi-auth-hawk": "^3.0.0",
+    "nano": "^6.1.4",
+    "redis": "^0.12.1",
+    "uuid": "^2.0.1"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
