@@ -6,10 +6,7 @@ const config = require('config');
 const plugins = [
     {
         register: require('./lib/plugins/hapi-pouch.js'),
-        options: {
-            db: 'coinstac-users',
-            prefix: 'userDb'
-        }
+        options: config.get('pouchdb.users')
     },
     { register: require('inject-then') }
 ];
