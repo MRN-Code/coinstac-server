@@ -100,19 +100,36 @@ describe('Users', () => {
         });
     });
 
-    it('Should accept POST request with proper payload', () => {
-        return server.injectThen({
-            method: 'POST',
-            url: path,
-            payload: {
-                username: 'test',
-                email: 'test@test.com',
-                password: '12345',
-                name: 'Test User',
-                institution: 'testiversity'
-            }
-        }).then((resp) => {
-            resp.statusCode.should.eql(200);
+    describe('User addition', () => {
+        let userId;
+        let newUser = {
+            username: 'test',
+            email: 'test@test.com',
+            password: '12345',
+            name: 'Test User',
+            institution: 'testiversity'
+        }
+        it('Should accept POST request with proper payload', () => {
+            return server.injectThen({
+                method: 'POST',
+                url: path,
+                payload: newUser
+            }).then((resp) => {
+                userId = resp.result;
+                console.log('User ID: ' + resp.result);
+                resp.statusCode.should.eql(200);
+            });
+        });
+
+        it('Should respond with the added user', () => {
+            return server.injectThen({
+                method: 'GET',
+                url: path + '/' + userId
+            }).then ((resp) => {
+                console.log('Result: ' + resp.result);
+                const user = JSON.parse(resp.result);
+                user.username.should.eql(newUser.username);
+            });
         });
     });
 });
