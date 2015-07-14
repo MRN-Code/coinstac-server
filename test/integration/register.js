@@ -89,6 +89,17 @@ describe('Users', () => {
         });
     });
 
+    it('Should respond to GET request with one user', () => {
+        return server.injectThen({
+            method: 'GET',
+            url: path + '/' + fakeUsers[0]._id
+        }).then ((resp) => {
+            console.log(resp.result);
+            const users = JSON.parse(resp.result);
+            users.length.should.eql(fakeUsers.length);
+        });
+    });
+
     it('Should accept POST request with proper payload', () => {
         return server.injectThen({
             method: 'POST',
