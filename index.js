@@ -40,20 +40,42 @@ server.route({
         */
     }
 });
+server.route({
+    method: 'GET',
+    path: '/users',
+    handler: (request, reply) => {
+        const db = server.plugins.pouch.userDb;
+        db.allDocs({ include_docs: true }) // jshint ignore:line
+        .then((docs) => {
+            reply(JSON.stringify(docs.rows));
+        }).catch((err) => {
+            reply(200, err.toString());
+        });
+        */
+    }
+});
 
-server.register(plugins, function(err) {
-        if (err) {
-            console.log('Error registering plugins', err);
-        } else {
-            console.log('plugins registered');
-            if (!module.parent) {
-                server.start(() => {
-                    console.log('Server running at:', server.info.uri);
-                });
-            }
-        }
+server.route({
+    method: 'GET',
+    path: '/users/{id}',
+    handler: (request, reply) => {
+
     }
 
-);
+
+})
+
+server.register(plugins, function(err) {
+    if (err) {
+        console.log('Error registering plugins', err);
+    } else {
+        console.log('plugins registered');
+        if (!module.parent) {
+            server.start(() => {
+                console.log('Server running at:', server.info.uri);
+            });
+        }
+    }
+});
 
 module.exports = server;
