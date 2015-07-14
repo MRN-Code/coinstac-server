@@ -2,10 +2,13 @@
     "server": {
         "port": 3000
     },
-    "couchdb":{
+    "pouchdb":{
         "users": {
-            "url": "http://localhost:5984",
-            "db": "coinstac-users"
+            "protocol": "http",
+            "host": "localhost",
+            "port": 5984,
+            "db": "coinstac-users",
+            "namespace": "userDb"
         }
     }
 }

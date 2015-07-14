@@ -5,14 +5,8 @@ const server = new Hapi.Server();
 const config = require('config');
 const plugins = [
     {
-        register: require('hapi-relax'),
-        options: {
-            nano: {
-                url: config.get('couchdb.users.url'),
-                db: config.get('couchdb.users.db')
-            },
-            prefix: 'userDb'
-        }
+        register: require('./lib/plugins/hapi-pouch.js'),
+        options: config.get('pouchdb.users')
     },
     { register: require('inject-then') }
 ];
@@ -23,7 +17,7 @@ server.route({
     method: 'GET',
     path: '/users',
     handler: (request, reply) => {
-        server.methods.userDb.get('*', (err, all) => {
+        server.methods.userDb.list((err, all) => {
             console.log(err);
             console.log(all);
             reply(JSON.stringify(all));
