@@ -49,3 +49,5 @@ Apache CouchDB has started. Time to relax.
 [info] [<0.102.0>] 127.0.0.1 - - GET /_config/native_query_servers/ 200
 [info] [<0.115.0>] 127.0.0.1 - - GET /coinstac-users/* 404
 [info] [<0.788.0>] 127.0.0.1 - - GET /coinstac-users/* 404
+[info] [<0.793.0>] 127.0.0.1 - - GET /coinstac-users/_all_docs 200
+[info] [<0.790.0>] 127.0.0.1 - - GET /coinstac-users/_all_docs 200
