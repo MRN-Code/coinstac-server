@@ -18,6 +18,7 @@
     "hapi-couchdb": "^0.2.0",
     "hapi-relax": "^1.0.1",
     "nano": "^6.1.4",
+    "pouchdb": "^3.6.0",
     "redis": "^0.12.1",
     "uuid": "^2.0.1"
   },
@@ -31,11 +32,12 @@
     "inject-then": "^2.0.0",
     "load-grunt-config": "^0.16.0",
     "load-grunt-tasks": "^3.1.0",
+    "randomstring": "^1.0.7",
     "should": "^5.0.0",
     "time-grunt": "^1.0.0"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "mocha --harmony test/integration/*.js"
   },
   "repository": {
     "type": "git",
