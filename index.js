@@ -3,10 +3,11 @@
 const Hapi = require('hapi');
 const server = new Hapi.Server();
 const config = require('config');
+const _ = require('lodash');
 const plugins = [
     {
         register: require('./lib/plugins/hapi-pouch.js'),
-        options: config.get('pouchdb.users')
+        options: _.merge(config.get('pouchdb.users'), { namespace: 'userDb' })
     },
     { register: require('inject-then') }
 ];
@@ -17,11 +18,12 @@ server.route({
     method: 'GET',
     path: '/users',
     handler: (request, reply) => {
-        server.methods.userDb.list((err, all) => {
-            console.log(err);
-            console.log(all);
-            reply(JSON.stringify(all));
-        });
+        const db = server.plugins.pouch.userDb;
+        db.allDocs({ include_docs: true }) // jshint ignore:line
+        .then((docs) => {
+            reply(JSON.stringify(docs.rows));
+        })
+        .catch
         /*
         const users = [
             {
