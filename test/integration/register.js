@@ -84,7 +84,8 @@ describe('Users', () => {
             method: 'GET',
             url: path
         }).then ((resp) => {
-            resp.result.should.eql(fakeUsers);
+            const users = JSON.parse(resp.result);
+            users.length.should.eql(fakeUsers.length);
         });
     });
 

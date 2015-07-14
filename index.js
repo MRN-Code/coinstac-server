@@ -22,8 +22,9 @@ server.route({
         db.allDocs({ include_docs: true }) // jshint ignore:line
         .then((docs) => {
             reply(JSON.stringify(docs.rows));
-        })
-        .catch
+        }).catch((err) => {
+            reply(200, err.toString());
+        });
         /*
         const users = [
             {
