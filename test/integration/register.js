@@ -94,9 +94,8 @@ describe('Users', () => {
             method: 'GET',
             url: path + '/' + fakeUsers[0]._id
         }).then ((resp) => {
-            console.log(resp.result);
-            const users = JSON.parse(resp.result);
-            users.length.should.eql(fakeUsers.length);
+            const user = JSON.parse(resp.result);
+            user.username.should.eql(fakeUsers[0].username);
         });
     });
 
