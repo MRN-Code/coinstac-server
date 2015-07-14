@@ -1,20 +1,33 @@
 'use strict';
 
-const url = require('url');
 const chai = require('chai');
 const config = require('config'); // jshint ignore:line
-const randomstring = require('randomstring');
-const testDb = 'test_register';
+const testDb = 'test-coinstac-users';
 config.pouchdb.users.db = testDb;
-const path = url.format({
-    protocol: config.pouchdb.users.protocol,
-    hostname: config.pouchdb.users.hostname,
-    port: config.pouchdb.users.port,
-    pathname: config.pouchdb.users.db
-});
-const PouchDB = require('PouchDB');
+const path = '/users';
 const server = require('../../index.js');
-let db = server.plugins.pouch.users;
+const db = server.plugins.pouch.userDb;
+const _ = require('lodash');
+
+const fakeUsers = [
+    {
+        _id: 'fakeuser-1',
+        username: 'user1',
+        password: 'hashme',
+        email: 'test@test.com',
+        institution: 'test',
+        name: 'Test Lastname'
+    },
+    {
+        _id: 'fakeuser-2',
+        username: 'user2',
+        password: 'hashme2',
+        email: 'user2@test.com',
+        institution: 'test',
+        name: 'User Two'
+    }
+];
+
 chai.use(require('chai-as-promised'));
 chai.should();
 
@@ -22,51 +35,57 @@ chai.should();
  * Fetch all rows
  * @return {promise} resolves to all rows
  */
-let allRows = () => {
-    return db.allDocs({include_docs: true}) // jshint ignore:line
-        .then(function (docs) {
+function fetchAllRows() {
+    return db.allDocs({ include_docs: true }) // jshint ignore:line
+        .then((docs) => {
             return docs.rows;
         });
-};
+}
 
 /**
  * Delete all rows, provided db rows with documents
  * @param  {Row} rows
  * @return {promise} resolves to bulk action result report set
  */
-let deleteAll = (rows) => {
+function deleteAll(rows) {
     let docs = rows.map((row) => {
         row.doc._deleted = true;
         return row.doc;
     });
+
     return db.bulkDocs(docs);
-};
+}
+
+/**
+ * prepare user DB with dummy data
+ * @return {Promise}
+ */
+function prepareUserDb(done) {
+    return fetchAllRows()
+        .then(deleteAll)
+        .then(_.bind(db.bulkDocs, db, fakeUsers))
+        .then(() => { return done(); })
+        .catch(done);
+}
 
 describe('Users', () => {
-    beforeEach((done) => {
-        let ready = () => {
-            done();
-        };
-        if (db) {
-            db.put({
-                _id: 'test' + randomstring.generate(25),
-                title: +Date()
-            })
-            .then(allRows)
-            .then(deleteAll)
-            .then(ready)
-            .catch((error) => { console.log(error.message); });
-        } else {
-            return ready();
-        }
-    });
-
+    beforeEach(prepareUserDb);
     it('Should accept GET request', () => {
         return server.injectThen({
             method: 'GET',
             url: path
         }).then ((resp) => {
             resp.statusCode.should.eql(200);
+        });
+    });
+
+    it('Should respond to GET request with array of users', () => {
+        return server.injectThen({
+            method: 'GET',
+            url: path
+        }).then ((resp) => {
+            const users = JSON.parse(resp.result);
+            users.length.should.eql(fakeUsers.length);
         });
     });
 

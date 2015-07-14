@@ -4,6 +4,7 @@ const Hapi = require('hapi');
 const server = new Hapi.Server();
 const config = require('config');
 const glob = require('glob')
+const _ = require('lodash');
 
 server.connection({port:config.get('server.port')});
 
@@ -11,10 +12,12 @@ server.route({
     method: 'GET',
     path: '/users',
     handler: (request, reply) => {
-        server.methods.userDb.list((err, all) => {
-            console.log(err);
-            console.log(all);
-            reply(JSON.stringify(all));
+        const db = server.plugins.pouch.userDb;
+        db.allDocs({ include_docs: true }) // jshint ignore:line
+        .then((docs) => {
+            reply(JSON.stringify(docs.rows));
+        }).catch((err) => {
+            reply(200, err.toString());
         });
         /*
         const users = [
