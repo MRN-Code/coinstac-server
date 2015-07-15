@@ -26,7 +26,7 @@ function setPlugins() {
             register: require('./lib/plugins/hapi-pouch.js'),
             options: _.merge(
                 config.get('pouchdb.users'),
-                { namespace: 'userDb' }
+                { namespace: 'userDb', plugins: [require('pouchdb-find')] }
             )
         },
         {
@@ -51,13 +51,25 @@ function setPlugins() {
     return plugins;
 }
 
+/**
+ * Add promise to be fulfilled when the plugins have loaded
+ * This is primarily for use by the tests
+ */
+server.app.pluginsLoaded = new Promise((res, rej) => {
+    server.app.resolvePluginsLoaded = res;
+    server.app.rejectPluginsLoaded = rej;
+});
+
 server.register(setPlugins(), function(err) {
     if (err) {
         console.log('Error registering plugins', err);
+        server.app.rejectPluginsLoaded(err);
     } else {
+        server.app.resolvePluginsLoaded();
         console.log('plugins registered');
-        // load demo data
         if (!module.parent) {
+            // We are not being required from another script. This is not a test
+            // load demo data
             Promise.all(require('./config/demo-data.js')(server.plugins.pouch))
             .then(() => {
                 server.start(() => {
