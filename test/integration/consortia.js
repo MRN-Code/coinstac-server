@@ -116,6 +116,7 @@ describe('Consortia', () => {
 
     describe('Consortia addition', () => {
         let consortiaId;
+        let consortia;
         let newConsortia = {
             label: 'consortia test label',
             users: [
@@ -145,8 +146,21 @@ describe('Consortia', () => {
                 method: 'GET',
                 url: path + '/' + consortiaId
             }).then((resp) => {
-                const consortia = resp.result;
+                consortia = resp.result;
                 consortia.label.should.eql(newConsortia.label);
+            });
+        });
+
+        it('Should accept PUT request with added user', () => {
+            consortia.users.push({id: 'newTestUser'});
+
+            return server.injectThen({
+                method: 'PUT',
+                url: path,
+                payload: consortia
+            }).then((resp) => {
+                const response = resp.result;
+                response.should.have.property('rev');
             });
         });
     });

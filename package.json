@@ -43,7 +43,8 @@
     "time-grunt": "^1.0.0"
   },
   "scripts": {
-    "test": "mocha --harmony test/integration/*.js"
+    "test": "mocha --harmony test/integration/*.js",
+    "run": "node --harmony index.js"
   },
   "repository": {
     "type": "git",
