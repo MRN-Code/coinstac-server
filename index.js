@@ -1,7 +1,13 @@
 'use strict';
 
 const Hapi = require('hapi');
-const server = new Hapi.Server();
+const server = new Hapi.Server({
+    connections: {
+        routes: {
+            cors: true
+        }
+    }
+});
 const config = require('config');
 const glob = require('glob');
 const _ = require('lodash');
