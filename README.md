@@ -70,6 +70,7 @@ It is up to the client to discard the HAWK key pair on its end.
 [] Add routes for tags
 [] Add validation to payloads received
 [] Add persistent tracking of server-side analyses to be performed per consortium.
+[] Migrate hapi-pouch.js to full-on plugins
 
 ## Contributing
 Please submit any changes to this repo (including additions and subtractions from the lint config files) as pull requests.
