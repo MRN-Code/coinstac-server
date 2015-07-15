@@ -1,0 +1,10 @@
+
+heart_beat_kill_pid = 63412
+heart_beat_timeout = 11
+heart: Tue Jul 14 23:13:07 2015: heart-beat time-out, no activity for 337 seconds
+heart: Tue Jul 14 23:13:09 2015: Executed "/usr/local/Cellar/couchdb/1.6.1_2/bin/couchdb -k" -> 0. Terminating.
+
+heart_beat_kill_pid = 64091
+heart_beat_timeout = 11
+heart: Wed Jul 15 00:34:12 2015: Erlang has closed.
+heart: Wed Jul 15 00:34:12 2015: Executed "/usr/local/Cellar/couchdb/1.6.1_2/bin/couchdb -k" -> 0. Terminating.
