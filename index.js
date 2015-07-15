@@ -5,6 +5,8 @@ const server = new Hapi.Server();
 const config = require('config');
 const glob = require('glob');
 const _ = require('lodash');
+const data = require('./config/demo-data.js');
+const Promise = require('bluebird');
 
 server.connection({port:config.get('server.port')});
 
@@ -48,9 +50,15 @@ server.register(setPlugins(), function(err) {
         console.log('Error registering plugins', err);
     } else {
         console.log('plugins registered');
+        // load demo data
         if (!module.parent) {
-            server.start(() => {
-                console.log('Server running at:', server.info.uri);
+            Promise.all(require('./config/demo-data.js')(server.plugins.pouch))
+            .then(() => {
+                server.start(() => {
+                    console.log('Server running at:', server.info.uri);
+                });
+            }).catch((err) => {
+                console.dir(err);
             });
         }
     }
