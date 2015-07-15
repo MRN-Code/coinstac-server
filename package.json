@@ -20,6 +20,7 @@
     "hapi-auth-hawk": "^3.0.0",
     "hapi-couchdb": "^0.2.0",
     "hapi-relax": "^1.0.1",
+    "hapi-response-meta": "^0.2.0",
     "lodash": "^3.10.0",
     "nano": "^6.1.4",
     "pouchdb": "^3.6.0",
