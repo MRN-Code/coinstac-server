@@ -74,7 +74,7 @@ describe('Users', () => {
         return server.injectThen({
             method: 'GET',
             url: path
-        }).then ((resp) => {
+        }).then((resp) => {
             resp.statusCode.should.eql(200);
         });
     });
@@ -83,7 +83,7 @@ describe('Users', () => {
         return server.injectThen({
             method: 'GET',
             url: path
-        }).then ((resp) => {
+        }).then((resp) => {
             const users = JSON.parse(resp.result);
             users.length.should.eql(fakeUsers.length);
         });
@@ -93,7 +93,7 @@ describe('Users', () => {
         return server.injectThen({
             method: 'GET',
             url: path + '/' + fakeUsers[0]._id
-        }).then ((resp) => {
+        }).then((resp) => {
             const user = JSON.parse(resp.result);
             user.username.should.eql(fakeUsers[0].username);
         });
@@ -123,7 +123,7 @@ describe('Users', () => {
             return server.injectThen({
                 method: 'GET',
                 url: path + '/' + userId
-            }).then ((resp) => {
+            }).then((resp) => {
                 const user = JSON.parse(resp.result);
                 user.username.should.eql(newUser.username);
             });
