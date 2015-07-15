@@ -99,7 +99,7 @@ describe('Consortia', () => {
             method: 'GET',
             url: path
         }).then((resp) => {
-            const consortia = JSON.parse(resp.result);
+            const consortia = resp.result;
             consortia.length.should.eql(fakeData.length);
         });
     });
@@ -109,7 +109,7 @@ describe('Consortia', () => {
             method: 'GET',
             url: path + '/' + fakeData[0]._id
         }).then((resp) => {
-            const consortia = JSON.parse(resp.result);
+            const consortia = resp.result;
             consortia.label.should.eql(fakeData[0].label);
         });
     });
@@ -145,7 +145,7 @@ describe('Consortia', () => {
                 method: 'GET',
                 url: path + '/' + consortiaId
             }).then((resp) => {
-                const consortia = JSON.parse(resp.result);
+                const consortia = resp.result;
                 consortia.label.should.eql(newConsortia.label);
             });
         });
