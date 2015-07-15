@@ -6,7 +6,7 @@ const testDb = 'test-coinstac-users';
 config.pouchdb.users.db = testDb;
 const path = '/users';
 const server = require('../../index.js');
-const db = server.plugins.pouch.userDb;
+let db;
 const _ = require('lodash');
 
 const fakeUsers = [
@@ -60,12 +60,16 @@ function deleteAll(rows) {
  * prepare user DB with dummy data
  * @return {Promise}
  */
-function prepareUserDb(done) {
-    return fetchAllRows()
-        .then(deleteAll)
-        .then(_.bind(db.bulkDocs, db, fakeUsers))
-        .then(() => { return done(); })
-        .catch(done);
+function prepareUserDb() {
+    this.timeout(5000);
+    return server.app.pluginsLoaded
+        .then(() => {
+            console.log('server ready');
+            db = server.plugins.pouch.userDb;
+            return fetchAllRows()
+                .then(deleteAll)
+                .then(_.bind(db.bulkDocs, db, fakeUsers));
+        });
 }
 
 describe('Users', () => {
