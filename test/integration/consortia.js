@@ -8,6 +8,9 @@ const path = '/consortia';
 const server = require('../../index.js');
 const db = server.plugins.pouch.consortiaDb;
 const _ = require('lodash');
+const PouchDB = require('pouchdb');
+const url = require('url');
+const icdbOptions = config.get('pouchdb.icdb');
 
 const fakeData = [
     {
@@ -139,6 +142,21 @@ describe('Consortia', () => {
                 consortiaId = resp.result;
                 resp.statusCode.should.eql(200);
             });
+        });
+
+        it('Should verify that a new db was created', () => {
+            // define new db parameters
+            const icdbUrl = url.format({
+                protocol: icdbOptions.protocol,
+                hostname: icdbOptions.hostname,
+                port: icdbOptions.port,
+                pathname: 'coinstac-icdb-' + consortiaId.toLowerCase()
+            });
+
+            // create new db
+            const newDb = new PouchDB(icdbUrl, {skipSetup: true});
+
+            return newDb.info();
         });
 
         it('Should respond with the added consortia', () => {

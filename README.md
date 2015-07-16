@@ -1,50 +1,76 @@
-# node_boilerplate
-boilerplate repo for node projects. Contains the official jshint and jscs RC files, as well as a basic Gruntfile and package.json to get you started.
+# COINSTAC Server
+Server-side services for the
+Collaborative Informatics and Neuroimaging Suite To Aide Consortia
+// TODO: update acronym definition
 
-# Copying
-Follow these steps to start a new project with this boilerplate.
-1. Create a new empty repo on github, and copy the URL.
-1. Clone **this** repo onto your machine.
-1. cd into this repo on your machine.
-1. Change the remote url to point to your new repo: `git remote set-url origin <paste url here>`.
-1. Push to the new repo: git push -u origin master.
-1. Be sure to modify package.json and this readme to reflect your project. 
+# Requirements
+1. CouchDB
+2. NodeJS (v12)
 
-## Linting
-Two packages are used for linting: jscs and jshint.
-The configuration for these linters can be found in `.jscs.json` and `.jshintrc`, respectively.
-Run the linters with the following commands:
+# Usage
+1. `git clone git@github.com:MRN-Code/coinstac-server; cd coinstac-server;`
+1. `npm i`
+1. `npm start` This will start CouchDB as a background process
+on the standard port, then start the Node server in the foreground.
+
+Note: to stop the CouchDB daemon, run `npm stop`
+
+# Tests
+`npm test`
+
+# API
+## Routes
+### GET /users/
+Retrieve a list of all registered users.
+
+### GET /users/{id}
+Retrieve a specific users' info.
+
+### POST /users
+Add/register a new user. Returns the id and rev of the user.
+// TODO: Also log the user in, and return their API key
+// TODO: Implement email verification
+
+### GET /consortia
+Retrieve a list of all consortia
+
+### GET /consortia/{id}
+Retrieve a specific consortium's info.
+
+### POST /consortia
+Add a new consortium. Returns the id and rev of the new consortium.
+The payload should be an object with the following properties
+```json
+{
+    label: {string},
+    description: {string},
+    users: {array},
+    tags: {array}
+}
 ```
-grunt jscs
-grunt jshint
-```
 
-## Testing
-Mocha is the test-runner of choice.
-By default, the `grunt test` command will run all tests in the `test` directory that match the patter `*_test.js`.
-Run your tests with the following command:
+### PUT /consortia/{id}
+Update an existing consortium.
+The payload should have the same properties as that for `POST /consortia`, in
+addition to `_id` and `_rev`.
 
-```
-grunt test
-```
+### GET /auth/login (not finished)
+Attempt to login with a username and password.
+Username and password should be passed in the headers in the following form:
+`Authorization: 'Basic ' + (new Buffer('uname:pwd')).toString('base64')`
+If successful will return a HAWK key pair for use in signing future requests.
 
-## Grunt
-Grunt is already set up to run tests and linting as shown above.
-This boilerplate also comes pre-installed with **load-grunt-config** and **load-npm-tasks**.
-To add a new grunt task from NPM, simply install it, and add the configuration in a `.js` file in `./grunt`.
-For example, to add a browserify task, run `npm i --save-dev browserify` then add your browserify config in `grunt/browserify.js`.
-Please look a the existing files in `grunt/browserify.js` for examples. Any custom tasks should also be defined in a file like `grunt/customTask.js`
+### GET /auth/logout (not finished)
+Logout.
+This will invalidate the HAWK key pair used to make this request.
+It is up to the client to discard the HAWK key pair on its end.
 
-Finally, you can run tests and linting with the following command:
-```
-grunt
-```
-
-## Config
-This boilerplate comes with config already installed to aide in configuration management.
-Use config in your project!
-See index.js for an example.
+# TODO
+[] Implement ath routes and protect actions that should require login
+[] Add routes for tags
+[] Add validation to payloads received
+[] Add persistent tracking of server-side analyses to be performed per consortium.
+[] Migrate hapi-pouch.js to full-on plugins
 
 ## Contributing
-Please submit any changes to this repo (including additions and subtractions from the lint config files) as pull requests. 
-
+Please submit any changes to this repo (including additions and subtractions from the lint config files) as pull requests.
