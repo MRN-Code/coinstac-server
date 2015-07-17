@@ -72,6 +72,42 @@ const demoData = {
                     id: 'faketag-2'
                 }
             ]
+        },
+        {
+            _id: 'fakeData-3',
+            label: 'Sample Consortia 3',
+            users: [
+                {
+                    id: 'fakeuser-1'
+                },
+                {
+                    id: 'fakeuser-4'
+                }
+            ],
+            description: 'Proin nec tincidunt ligula, eget mollis eros. Vestibulum varius, nibh vel pulvinar venenatis, sem sem cursus lacus, at pellentesque elit leo at augue. Quisque eget ex sed libero euismod dapibus.',
+            tags: [
+                {
+                    id: 'faketag-1'
+                },
+                {
+                    id: 'faketag-2'
+                }
+            ]
+        },
+        {
+            _id: 'fakeData-4',
+            label: 'Sample Consortia 4',
+            users: [
+                {
+                    id: 'fakeuser-2'
+                }
+            ],
+            description: 'Sed ullamcorper erat ligula. Aenean sodales lorem sit amet neque pulvinar, nec facilisis mi maximus. Vestibulum ante mauris, porttitor id pellentesque vel, imperdiet lacinia erat. Nunc pellentesque neque dui, id ornare lacus ornare eu.',
+            tags: [
+                {
+                    id: 'faketag-2'
+                }
+            ]
         }
     ]
 };
