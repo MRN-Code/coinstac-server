@@ -1,49 +1,18 @@
 'use strict';
 
 const chai = require('chai');
-const config = require('config'); // jshint ignore:line
+let config = require('config'); // jshint ignore:line
 const testDb = 'test-coinstac-consortia';
-config.pouchdb.users.db = testDb;
+//config.pouchdb.users.db = testDb;
 const path = '/consortia';
 const server = require('../../index.js');
-const db = server.plugins.pouch.consortiaDb;
 const _ = require('lodash');
 const PouchDB = require('pouchdb');
 const url = require('url');
 const icdbOptions = config.get('pouchdb.icdb');
+let db;
 
-const fakeData = [
-    {
-        _id: 'fakeData-1',
-        label: 'fake consortia1',
-        users: [
-            {
-                id: 'fakeUser-1'
-            }
-        ],
-        description: 'fake description 1',
-        tags: [
-            {
-                id: 'fakeTag-1'
-            }
-        ]
-    },
-    {
-        _id: 'fakeData-2',
-        label: 'fake consortia2',
-        users: [
-            {
-                id: 'fakeUser-2'
-            }
-        ],
-        description: 'fake description 2',
-        tags: [
-            {
-                id: 'fakeTag-2'
-            }
-        ]
-    }
-];
+const fakeData = require('../../config/demo-data.js').demoData.fakeData;
 
 chai.use(require('chai-as-promised'));
 chai.should();
@@ -78,10 +47,15 @@ function deleteAll(rows) {
  * @return {Promise}
  */
 function prepareConsortiaDb(done) {
-    return fetchAllRows()
-        .then(deleteAll)
-        .then(_.bind(db.bulkDocs, db, fakeData))
-        .then(() => { return done(); })
+    this.timeout(5000)
+    return server.app.pluginsLoaded
+        .then(() => {
+            db = server.plugins.pouch.consortiaDb;
+            return fetchAllRows()
+            .then(deleteAll)
+            .then(_.bind(db.bulkDocs, db, fakeData))
+            .then(() => { return done(); })
+        })
         .catch(done);
 }
 
