@@ -116,7 +116,7 @@ const demoData = {
 * prepare user DB with dummy data
 * @return {Promise}
 */
-module.exports = function (pouch) {
+function loadDemoData(pouch) {
     const promiseArray = [];
     promiseArray.push(
         pouch.userDb.allDocs({ include_docs: true }) // jshint ignore:line
@@ -134,4 +134,9 @@ module.exports = function (pouch) {
     );
 
     return promiseArray;
+};
+
+module.exports = {
+    demoData: demoData,
+    loadDemoData: loadDemoData
 };

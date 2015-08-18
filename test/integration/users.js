@@ -3,30 +3,13 @@
 const chai = require('chai');
 const config = require('config'); // jshint ignore:line
 const testDb = 'test-coinstac-users';
-config.pouchdb.users.db = testDb;
+//config.pouchdb.users.db = testDb;
 const path = '/users';
 const server = require('../../index.js');
 let db;
 const _ = require('lodash');
 
-const fakeUsers = [
-    {
-        _id: 'fakeuser-1',
-        username: 'user1',
-        password: 'hashme',
-        email: 'test@test.com',
-        institution: 'test',
-        name: 'Test Lastname'
-    },
-    {
-        _id: 'fakeuser-2',
-        username: 'user2',
-        password: 'hashme2',
-        email: 'user2@test.com',
-        institution: 'test',
-        name: 'User Two'
-    }
-];
+const fakeUsers = require('../../config/demo-data.js').demoData.fakeUsers;
 
 chai.use(require('chai-as-promised'));
 chai.should();

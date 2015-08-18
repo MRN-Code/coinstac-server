@@ -73,7 +73,7 @@ server.register(setPlugins(), function(err) {
         if (!module.parent) {
             // We are not being required from another script. This is not a test
             // load demo data
-            Promise.all(require('./config/demo-data.js')(server.plugins.pouch))
+            Promise.all(data.loadDemoData(server.plugins.pouch))
             .then(() => {
                 server.start(() => {
                     console.log('Server running at:', server.info.uri);

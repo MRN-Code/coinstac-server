@@ -43,8 +43,8 @@
     "time-grunt": "^1.0.0"
   },
   "scripts": {
-    "test": "mocha --harmony test/integration/*.js",
-    "start": "couchdb -b && node --harmony index.js",
+    "test": "mocha --harmony --harmony_arrow_functions test/integration/*.js",
+    "start": "couchdb -b && node --harmony --harmony_arrow_functions index.js",
     "stop": "couchdb -k"
   },
   "repository": {
