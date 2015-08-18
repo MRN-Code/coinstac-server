@@ -26,7 +26,7 @@ function setPlugins() {
             register: require('./lib/plugins/hapi-pouch.js'),
             options: _.merge(
                 config.get('pouchdb.users'),
-                { namespace: 'userDb', plugins: [require('pouchdb-find')] }
+                { namespace: 'userDb' }
             )
         },
         {
@@ -35,6 +35,9 @@ function setPlugins() {
                 config.get('pouchdb.consortia'),
                 { namespace: 'consortiaDb' }
             )
+        },
+        {
+            register: require('./lib/plugins/response-formatter.js')
         },
         { register: require('inject-then') }
     ];
