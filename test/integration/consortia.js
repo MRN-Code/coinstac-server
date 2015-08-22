@@ -7,15 +7,16 @@ const testDb = 'test-coinstac-consortia';
 const path = '/consortia';
 const server = require('../../index.js');
 const _ = require('lodash');
-const PouchDB = require('pouchdb');
+const PouchW = require('pouchdb-wrapper');
 const url = require('url');
 const icdbOptions = config.get('pouchdb.icdb');
-let db;
-
 const fakeData = require('../../config/demo-data.js').demoData.fakeData;
 
 chai.use(require('chai-as-promised'));
 chai.should();
+
+let dummyConsortiaName = 'consortia test label'
+let db;
 
 /**
  * Fetch all rows
@@ -76,7 +77,7 @@ describe('Consortia', () => {
             method: 'GET',
             url: path
         }).then((resp) => {
-            const consortia = resp.result;
+            const consortia = resp.result.data;
             consortia.length.should.eql(fakeData.length);
         });
     });
@@ -86,16 +87,17 @@ describe('Consortia', () => {
             method: 'GET',
             url: path + '/' + fakeData[0]._id
         }).then((resp) => {
-            const consortia = resp.result;
+            const consortia = resp.result.data[0];
             consortia.label.should.eql(fakeData[0].label);
         });
     });
 
     describe('Consortia addition', () => {
         let consortiaId;
+        let consortiaName;
         let consortia;
         let newConsortia = {
-            label: 'consortia test label',
+            label: dummyConsortiaName,
             users: [
                 {id: 'testUser-1'},
                 {id: 'testUser-2'}
@@ -113,24 +115,33 @@ describe('Consortia', () => {
                 url: path,
                 payload: newConsortia
             }).then((resp) => {
-                consortiaId = resp.result;
+                consortiaId = resp.result.data[0]._id;
+                consortiaName = resp.result.data[0].name;
                 resp.statusCode.should.eql(200);
             });
         });
 
         it('Should verify that a new db was created', () => {
             // define new db parameters
-            const icdbUrl = url.format({
-                protocol: icdbOptions.protocol,
-                hostname: icdbOptions.hostname,
-                port: icdbOptions.port,
-                pathname: 'coinstac-icdb-' + consortiaId.toLowerCase()
-            });
+            let config = {
+                name: 'coinstac-icdb-' + _.kebabCase(dummyConsortiaName.toLowerCase()),
+                conn: {
+                    protocol: icdbOptions.protocol,
+                    hostname: icdbOptions.hostname,
+                    port: icdbOptions.port,
+                    pathname: 'coinstac-icdb-' + _.kebabCase(dummyConsortiaName.toLowerCase())
+                },
+                pouchConfig: {skipSetup: true}
+            };
 
             // create new db
-            const newDb = new PouchDB(icdbUrl, {skipSetup: true});
-
-            return newDb.info();
+            let newDb;
+            newDb = new PouchW(config);
+                debugger;
+            return newDb.info().catch((info) => {
+                debugger;
+                info.should.be.ok();
+            });
         });
 
         it('Should respond with the added consortia', () => {
@@ -138,7 +149,7 @@ describe('Consortia', () => {
                 method: 'GET',
                 url: path + '/' + consortiaId
             }).then((resp) => {
-                consortia = resp.result;
+                consortia = resp.result.data[0];
                 consortia.label.should.eql(newConsortia.label);
             });
         });
@@ -151,8 +162,8 @@ describe('Consortia', () => {
                 url: path,
                 payload: consortia
             }).then((resp) => {
-                const response = resp.result;
-                response.should.have.property('rev');
+                const consortia = resp.result.data[0];
+                consortia.should.have.property('rev');
             });
         });
     });

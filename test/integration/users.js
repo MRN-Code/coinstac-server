@@ -7,6 +7,7 @@ const testDb = 'test-coinstac-users';
 const path = '/users';
 const server = require('../../index.js');
 let db;
+let tempUserId;
 const _ = require('lodash');
 
 const fakeUsers = require('../../config/demo-data.js').demoData.fakeUsers;
@@ -71,7 +72,7 @@ describe('Users', () => {
             method: 'GET',
             url: path
         }).then((resp) => {
-            const users = resp.result;
+            const users = resp.result.data;
             users.length.should.eql(fakeUsers.length);
         });
     });
@@ -81,13 +82,12 @@ describe('Users', () => {
             method: 'GET',
             url: path + '/' + fakeUsers[0]._id
         }).then((resp) => {
-            const user = resp.result;
+            const user = resp.result.data[0];
             user.username.should.eql(fakeUsers[0].username);
         });
     });
 
     describe('User addition', () => {
-        let userId;
         let newUser = {
             username: 'test',
             email: 'test@test.com',
@@ -101,7 +101,9 @@ describe('Users', () => {
                 url: path,
                 payload: newUser
             }).then((resp) => {
-                userId = resp.result;
+                const user = resp.result.data[0];
+                tempUserId = user._id;
+                user.name.should.equal('Test User');
                 resp.statusCode.should.eql(200);
             });
         });
@@ -109,9 +111,9 @@ describe('Users', () => {
         it('Should respond with the added user', () => {
             return server.injectThen({
                 method: 'GET',
-                url: path + '/' + userId
+                url: path + '/' + tempUserId
             }).then((resp) => {
-                const user = resp.result;
+                const user = resp.result.data[0];
                 user.username.should.eql(newUser.username);
             });
         });
