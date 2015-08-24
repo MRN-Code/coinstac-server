@@ -29,6 +29,7 @@
     "uuid": "^2.0.1"
   },
   "devDependencies": {
+    "axios": "^0.5.4",
     "chai": "^3.0.0",
     "chai-as-promised": "^5.1.0",
     "grunt": "^0.4.5",
@@ -38,6 +39,7 @@
     "inject-then": "^2.0.0",
     "load-grunt-config": "^0.16.0",
     "load-grunt-tasks": "^3.1.0",
+    "nomnom": "^1.8.1",
     "randomstring": "^1.0.7",
     "should": "^5.0.0",
     "time-grunt": "^1.0.0"

@@ -65,6 +65,10 @@ Logout.
 This will invalidate the HAWK key pair used to make this request.
 It is up to the client to discard the HAWK key pair on its end.
 
+## development
+- helpful `couchdb` utilities may be found in `couch-util.js`.  For example:
+    - `node couch-util.js --dd` deletes all couchdb databases on your server. tread with caution! :)
+
 # TODO
 [] Implement ath routes and protect actions that should require login
 [] Add routes for tags
