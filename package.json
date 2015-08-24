@@ -44,8 +44,9 @@
   },
   "scripts": {
     "test": "mocha --harmony --harmony_arrow_functions test/integration/*.js",
-    "start": "couchdb -b && node --harmony --harmony_arrow_functions index.js",
-    "stop": "couchdb -k"
+    "start": "node --harmony --harmony_arrow_functions index.js",
+    "startcouch": "couchdb -b",
+    "stopcouch": "couchdb -k"
   },
   "repository": {
     "type": "git",
