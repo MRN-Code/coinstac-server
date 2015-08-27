@@ -163,7 +163,7 @@ describe('Consortia', () => {
                 payload: consortia
             }).then((resp) => {
                 const consortia = resp.result.data[0];
-                consortia.should.have.property('rev');
+                consortia.should.have.property('_rev');
             });
         });
     });

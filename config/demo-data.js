@@ -35,7 +35,7 @@ const demoData = {
     ],
     fakeData: [
         {
-            _id: 'fakeData-1',
+            _id: 'consortium-1',
             label: 'consortia1',
             users: [
                 {
@@ -53,7 +53,7 @@ const demoData = {
             ]
         },
         {
-            _id: 'fakeData-2',
+            _id: 'consortium-2',
             label: 'consortia2',
             users: [
                 {
@@ -74,7 +74,7 @@ const demoData = {
             ]
         },
         {
-            _id: 'fakeData-3',
+            _id: 'consortium-3',
             label: 'Sample Consortia 3',
             users: [
                 {
@@ -95,7 +95,7 @@ const demoData = {
             ]
         },
         {
-            _id: 'fakeData-4',
+            _id: 'consortium-4',
             label: 'Sample Consortia 4',
             users: [
                 {
