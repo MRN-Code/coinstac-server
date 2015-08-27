@@ -137,8 +137,11 @@ describe('Consortia', () => {
             // create new db
             let newDb;
             newDb = new PouchW(config);
-            return newDb.info().catch((info) => {
-                info.should.be.ok();
+            newDb.post({dummyData: 'dummyData'})
+            .then(() => { return newDb.info(); })
+            .then(info => { info.should.be.ok(); })
+            .catch(info => {
+                chai.assert.fail(info, 'info object');
             });
         });
 
