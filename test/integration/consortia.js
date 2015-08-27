@@ -15,7 +15,7 @@ const fakeData = require('../../config/demo-data.js').demoData.fakeData;
 chai.use(require('chai-as-promised'));
 chai.should();
 
-let dummyConsortiaName = 'consortia test label'
+let dummyConsortiumName = 'consortium test label'
 let db;
 
 /**
@@ -82,22 +82,22 @@ describe('Consortia', () => {
         });
     });
 
-    it('Should respond to GET request with one consortia', () => {
+    it('Should respond to GET request with one consortium', () => {
         return server.injectThen({
             method: 'GET',
             url: path + '/' + fakeData[0]._id
         }).then((resp) => {
-            const consortia = resp.result.data[0];
-            consortia.label.should.eql(fakeData[0].label);
+            const consortium = resp.result.data[0];
+            consortium.label.should.eql(fakeData[0].label);
         });
     });
 
-    describe('Consortia addition', () => {
-        let consortiaId;
-        let consortiaName;
-        let consortia;
+    describe('Consortium addition', () => {
+        let consortiumId;
+        let consortiumName;
+        let consortium;
         let newConsortia = {
-            label: dummyConsortiaName,
+            label: dummyConsortiumName,
             users: [
                 {id: 'testUser-1'},
                 {id: 'testUser-2'}
@@ -115,8 +115,8 @@ describe('Consortia', () => {
                 url: path,
                 payload: newConsortia
             }).then((resp) => {
-                consortiaId = resp.result.data[0]._id;
-                consortiaName = resp.result.data[0].name;
+                consortiumId = resp.result.data[0]._id;
+                consortiumName = resp.result.data[0].name;
                 resp.statusCode.should.eql(200);
             });
         });
@@ -124,12 +124,12 @@ describe('Consortia', () => {
         it('Should verify that a new db was created', () => {
             // define new db parameters
             let config = {
-                name: 'coinstac-icdb-' + _.kebabCase(dummyConsortiaName.toLowerCase()),
+                name: 'coinstac-icdb-' + _.kebabCase(dummyConsortiumName.toLowerCase()),
                 conn: {
                     protocol: icdbOptions.protocol,
                     hostname: icdbOptions.hostname,
                     port: icdbOptions.port,
-                    pathname: 'coinstac-icdb-' + _.kebabCase(dummyConsortiaName.toLowerCase())
+                    pathname: 'coinstac-icdb-' + _.kebabCase(dummyConsortiumName.toLowerCase())
                 },
                 pouchConfig: {skipSetup: true}
             };
@@ -137,33 +137,30 @@ describe('Consortia', () => {
             // create new db
             let newDb;
             newDb = new PouchW(config);
-                debugger;
             return newDb.info().catch((info) => {
-                debugger;
                 info.should.be.ok();
             });
         });
 
-        it('Should respond with the added consortia', () => {
+        it('Should respond with the added consortium', () => {
             return server.injectThen({
                 method: 'GET',
-                url: path + '/' + consortiaId
+                url: path + '/' + consortiumId
             }).then((resp) => {
-                consortia = resp.result.data[0];
-                consortia.label.should.eql(newConsortia.label);
+                consortium = resp.result.data[0];
+                consortium.label.should.eql(newConsortia.label);
             });
         });
 
         it('Should accept PUT request with added user', () => {
-            consortia.users.push({id: 'newTestUser'});
-
+            consortium.users.push({id: 'newTestUser'});
             return server.injectThen({
                 method: 'PUT',
                 url: path,
-                payload: consortia
+                payload: consortium
             }).then((resp) => {
-                const consortia = resp.result.data[0];
-                consortia.should.have.property('_rev');
+                const consortium = resp.result.data[0];
+                consortium.should.have.property('_rev');
             });
         });
     });
