@@ -130,19 +130,14 @@ describe('Consortia', () => {
                     hostname: icdbOptions.hostname,
                     port: icdbOptions.port,
                     pathname: 'coinstac-icdb-' + _.kebabCase(dummyConsortiumName.toLowerCase())
-                },
-                pouchConfig: {skipSetup: true}
+                }
             };
 
             // create new db
             let newDb;
             newDb = new PouchW(config);
-            newDb.post({dummyData: 'dummyData'})
-            .then(() => { return newDb.info(); })
-            .then(info => { info.should.be.ok(); })
-            .catch(info => {
-                chai.assert.fail(info, 'info object');
-            });
+            newDb.info()
+            .then(info => { info.should.be.ok(); });
         });
 
         it('Should respond with the added consortium', () => {
